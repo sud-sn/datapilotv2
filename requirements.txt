@@ -1,0 +1,19 @@
+# ── Web framework ────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+
+# ── Database drivers ─────────────────────────────────────────────────────────
+asyncpg>=0.29.0               # PostgreSQL async driver
+pyodbc>=5.1.0                 # Azure SQL / SQL Server (requires ODBC Driver 18)
+
+# ── SQL validation & transpilation ───────────────────────────────────────────
+sqlglot>=23.12.0              # Parse + re-emit SQL in target dialect
+
+# ── LLM (Ollama runs locally — only need HTTP client) ────────────────────────
+httpx>=0.27.0                 # Async HTTP client for Ollama API
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+structlog>=24.1.0             # Structured logging (audit trail)

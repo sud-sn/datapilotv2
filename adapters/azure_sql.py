@@ -70,7 +70,7 @@ class _ConnectionPool:
 
         # Pre-create min connections synchronously
         for _ in range(min_size):
-            conn = pyodbc.connect(connection_string, autocommit=True)
+            conn = pyodbc.connect(connection_string)
             self._pool.put(conn)
             self._size += 1
 
@@ -80,7 +80,7 @@ class _ConnectionPool:
             conn = self._pool.get(timeout=timeout)
         except queue.Empty:
             if self._size < self._max_size:
-                conn = pyodbc.connect(self._conn_str, autocommit=True)
+                conn = pyodbc.connect(self._conn_str)
                 self._size += 1
             else:
                 raise TimeoutError("All Azure SQL connections are busy")
@@ -92,7 +92,7 @@ class _ConnectionPool:
                 conn.close()
             except Exception:
                 pass
-            conn = pyodbc.connect(self._conn_str, autocommit=True)
+            conn = pyodbc.connect(self._conn_str)
             raise
         finally:
             self._pool.put(conn)
@@ -133,8 +133,6 @@ class AzureSQLAdapter(DatabaseAdapter):
             f"Encrypt={'yes' if s.az_encrypt else 'no'}",
             f"TrustServerCertificate={'yes' if s.az_trust_server_cert else 'no'}",
             f"Connection Timeout={s.az_connection_timeout}",
-            # Enforce read-only session
-            "ApplicationIntent=ReadOnly",
         ]
         return ";".join(parts)
 
